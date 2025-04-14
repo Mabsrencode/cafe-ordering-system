@@ -46,7 +46,7 @@ const SideBar = () => {
             <CiCoffeeCup className="text-4xl text-secondary" />
           )}
           {isSideBarOpen && (
-            <h1 className="text-secondary text-2xl font-bold manrope leading-4">
+            <h1 className="text-secondary text-xl font-bold manrope leading-4">
               {coffee_shop_name} <br />
               <span className="text-xs font-normal">Ordering System</span>
             </h1>
@@ -57,9 +57,9 @@ const SideBar = () => {
             {navigationItems.map((navItem) => (
               <li key={navItem.link}>
                 <Link
-                  className={`flex items-center gap-2 transition-all p-[14px] hover:bg-primary hover:text-black text-gray-700 rounded ${
+                  className={`flex items-center gap-2 transition-all p-[14px] hover:bg-secondary hover:text-black text-gray-700 rounded ${
                     pathname === navItem.link
-                      ? "bg-primary text-black"
+                      ? "bg-secondary text-black"
                       : "text-gray-700"
                   }`}
                   title={navItem.name}

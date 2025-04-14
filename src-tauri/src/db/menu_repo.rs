@@ -1,23 +1,22 @@
-use sqlx::{SqlitePool, Row,query};
+use sqlx::{SqlitePool, Row, query};
 use crate::models::menu::MenuItem;
 
-pub async fn fetch_all_menu_items(db: &SqlitePool) -> Result<Vec<MenuItem>, String> {
+pub async fn fetch_all_menu_items(db: &SqlitePool) -> Result<Vec<MenuItem>, sqlx::Error> {
     let rows = sqlx::query("SELECT * FROM menu")
         .fetch_all(db)
-        .await
-        .map_err(|e| e.to_string())?;
+        .await?;
 
     let items = rows
         .into_iter()
         .map(|row| MenuItem {
             id: row.try_get("id").ok(),
-            name: row.try_get("name").unwrap_or_default(),
-            description: row.try_get("description").unwrap_or_default(),
-            price_hot: row.try_get("price_hot").unwrap_or(0.0),
-            price_cold: row.try_get("price_cold").unwrap_or(0.0),
-            category: row.try_get("category").unwrap_or_default(),
-            image_url: row.try_get("image_url").unwrap_or_default(),
-            available: row.try_get::<i64, _>("available").unwrap_or(1) != 0,
+            name: row.get("name"),
+            description: row.get("description"),
+            price_hot: row.get("price_hot"),
+            price_cold: row.get("price_cold"),
+            category: row.get("category"),
+            image_url: row.get("image_url"),
+            available: row.get::<i64, _>("available") != 0,
             created_at: row.try_get("created_at").ok(),
         })
         .collect();
@@ -25,9 +24,8 @@ pub async fn fetch_all_menu_items(db: &SqlitePool) -> Result<Vec<MenuItem>, Stri
     Ok(items)
 }
 
-
-pub async fn insert_menu_item(db: &SqlitePool, item: MenuItem) -> Result<(), String> {
-    query(
+pub async fn insert_menu_item(db: &SqlitePool, item: MenuItem) -> Result<i64, sqlx::Error> {
+    let result = query(
         "INSERT INTO menu (
             name,
             description,
@@ -35,9 +33,8 @@ pub async fn insert_menu_item(db: &SqlitePool, item: MenuItem) -> Result<(), Str
             price_cold,
             category,
             image_url,
-            available,
-            created_at
-        ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, CURRENT_TIMESTAMP)"
+            available
+        ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)"
     )
     .bind(&item.name)
     .bind(&item.description)
@@ -47,8 +44,7 @@ pub async fn insert_menu_item(db: &SqlitePool, item: MenuItem) -> Result<(), Str
     .bind(&item.image_url)
     .bind(item.available as i64)
     .execute(db)
-    .await
-    .map_err(|e| e.to_string())?;
+    .await?;
 
-    Ok(())
+    Ok(result.last_insert_rowid())
 }

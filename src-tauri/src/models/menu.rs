@@ -1,3 +1,4 @@
+// src-tauri/src/models/menu.rs
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
