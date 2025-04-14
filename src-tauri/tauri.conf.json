@@ -13,8 +13,8 @@
     "windows": [
       {
         "title": "cafe-ordering-system",
-        "minWidth": 800,
-        "minHeight": 600
+        "minWidth": 1200,
+        "minHeight": 700
       }
     ],
     "security": {

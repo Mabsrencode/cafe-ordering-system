@@ -7,10 +7,10 @@ const Layout = () => {
   const { pathname } = useLocation();
   const isPublicRoute = publicRoutes.includes(pathname);
   return (
-    <main className="min-h-screen bg-white">
-      <div className={`${!isPublicRoute && "flex"} h-full`}>
+    <main className="min-h-screen bg-white-50">
+      <div className={`${!isPublicRoute && "flex"} h-full w-full`}>
         {!isPublicRoute && <SideBar />}
-        <div className="p-4">
+        <div className="p-4 w-full">
           <QueryClientProvider client={queryClient}>
             <Outlet />
           </QueryClientProvider>

@@ -10,7 +10,13 @@ export default {
         },
         black: {
           DEFAULT: "#000000",
-          50: "#E1E1E1",
+          50: "#1D1616",
+        },
+        primary: {
+          DEFAULT: "#D3CA79",
+        },
+        secondary: {
+          DEFAULT: "#BF9264",
         },
       },
     },
